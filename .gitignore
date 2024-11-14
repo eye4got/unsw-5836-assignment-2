@@ -1,0 +1,5 @@
+.venv/*
+*.png
+*.pyc
+rubric.md
+asmt_3.ipynb
