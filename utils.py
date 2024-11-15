@@ -83,3 +83,36 @@ def plot_classifier_results(classifier_name, results_df, col_name, use_log, plot
     plt.tight_layout()
     plt.savefig(os.path.join(plots_dir, f'{classifier_name.lower().replace(" ", "_")}_performance.png'))
     plt.show()
+    
+def save_table_to_tex(df, file_name, tables_dir, fix_r2_col_names=True, column_format=None):
+    # Replace R2 with proper LaTeX formatting
+    out_df = df.replace('R2', '$R^2$')
+    if fix_r2_col_names:
+        out_df.columns = [col.replace('R2', '$R^2$') for col in out_df.columns]
+    
+    # Set default column format if not provided, ensuring all columns have vertical lines
+    if column_format is None:
+        column_format = '|l|' + 'c|' * (len(out_df.columns) - 1)
+    
+    with open(os.path.join(tables_dir, f'{file_name}.tex'), 'w') as tf:
+        # Start table environment with full borders
+        tf.write(r'\begin{table}[ht]' + '\n')
+        tf.write(r'\centering' + '\n')
+        tf.write(r'\begin{tabular}{' + column_format + '}' + '\n')
+        tf.write(r'\hline' + '\n')  # Top horizontal line
+        
+        # Write the column headers manually with \hline
+        tf.write(' & '.join(out_df.columns) + r' \\' + '\n')
+        tf.write(r'\hline' + '\n')  # Horizontal line after header
+        
+        # Write table rows and ensure \hline after each row
+        for row in out_df.itertuples(index=False, name=None):
+            tf.write(' & '.join([str(item) for item in row]) + r' \\' + '\n')
+            tf.write(r'\hline' + '\n')  # Horizontal line after each row
+        
+        tf.write(r'\end{tabular}' + '\n')
+        
+        # Add caption and label
+        tf.write(r'\caption{Your Caption Here}' + '\n')
+        tf.write(r'\label{tab:your_label_here}' + '\n')
+        tf.write(r'\end{table}' + '\n')
