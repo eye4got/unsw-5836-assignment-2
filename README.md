@@ -6,5 +6,7 @@ Both scripts have been converted from jupyter notebooks. They contain a paramete
 02_classification_problem.py - a script for part A graphs/output
 03_contraceptive_choice.py - a script for part B graphs/output
 
+utils.py - contains some common functions in order to simplify code
+
 abalone.csv - part A dataset
 contraceptive_method_choice.csv - part B dataset
